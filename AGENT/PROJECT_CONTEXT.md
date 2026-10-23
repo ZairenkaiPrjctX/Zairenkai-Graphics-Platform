@@ -22,7 +22,7 @@
 | Contract types and decoders, no I/O | `crates/zgfx-core` | Verified. Evidence: 13 tests, 2026-10-23 |
 | Vulkan and GLES/EGL probes, CLI | `crates/zgfx` | Verified on a Linux host. Evidence: 3 unit + 9 CLI tests (3 need Mesa drivers), 2026-10-23. **Unverified** on Android |
 | Android binaries | `scripts/build-android.sh`, `.cargo/config.toml` | Verified. Evidence: NDK r27d, three ABIs, 16 KB LOAD alignment, 2026-10-23 |
-| CI | `.github/workflows/ci.yml` | actionlint clean. **Unverified** on GitHub |
+| CI | `.github/workflows/ci.yml` | Verified on GitHub. Evidence: run 39888606008 (`faf8870`), all 5 jobs green, including the probes on Mesa lavapipe/llvmpipe, 2026-10-23 |
 | Docs | `README.md`, `docs/` | Verified. Evidence: files present |
 
 ## Key facts and limitations

@@ -8,7 +8,7 @@ Evidence levels follow the graphics architecture brief: `source_only`, `fixture_
 |---|---|---|
 | Decoders, statuses, envelope | fixture_tested | `cargo test -p zgfx-core` |
 | Missing and wrong libraries, usage errors, time limit | host_tested | `crates/zgfx/tests/cli.rs`, `main.rs` tests |
-| Vulkan on Mesa lavapipe; no installable driver | host_tested | ignored tests in `cli.rs`, run with `--include-ignored` (below) |
+| Vulkan on Mesa lavapipe; no installable driver | host_tested | ignored tests in `cli.rs`, run with `--include-ignored` (below); also in CI, job `host-drivers` (run 39888606008) |
 | ES 3.2 context on Mesa llvmpipe (EGL surfaceless platform) | host_tested | the same |
 | Android emulator | not run | |
 | Any phone | **not run**: no device was available | |
