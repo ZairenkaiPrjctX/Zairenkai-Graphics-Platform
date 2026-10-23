@@ -1,0 +1,12 @@
+[package]
+name = "zgfx-core"
+description = "Zairenkai graphics contract (zairenkai.graphics schema 1): report types and decoders, no I/O"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true

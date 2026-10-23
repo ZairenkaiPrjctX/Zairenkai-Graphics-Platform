@@ -8,21 +8,35 @@ put detail in `AGENT/`.
 
 ## Current state (read first)
 
-As of 2026-10-18 this repository contained **no source code** (GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.).
-Until that changes:
+This repository holds **`zgfx`**, read-only Vulkan and OpenGL ES/EGL capability probes (Rust,
+MSRV 1.85): `crates/zgfx-core` (contract types and decoders, no I/O) and `crates/zgfx` (the
+probes and CLI). Decision: `docs/adr/0001-probe-stack.md`. Contract: `docs/CONTRACT.md`.
+Host-tested on Mesa lavapipe/llvmpipe; nothing has run on an Android device
+(`docs/TESTING.md`).
 
-- Do not describe an architecture, language, or toolchain as fact. Record discoveries in
-  `AGENT/PROJECT_CONTEXT.md` with evidence (file paths, manifests, command output).
-- When the first real code lands, update this file's **Commands** table and
-  `AGENT/ARCHITECTURE.md` in the same pull request.
+Non-negotiables in this repo:
+- **Read only.** No logical device, no drawing, no file, property or setting written. Never
+  write `debug.*` or `vendor.*` properties, force GPU frequencies, or install, replace or select a
+  driver (Mesa, Turnip, ANGLE). A control needs its own ADR, hardware validation and Core.
+- **Vulkan and GLES stay independent**: separate reports, statuses and tests.
+- **No guessed values.** A failed call is a status plus the API's error name; Android feature
+  flags are not proof of runtime support.
+- Libraries are opened at run time (`ash` `Entry::load_from`, `libloading`); never link
+  libvulkan, libEGL or libGLESv2 at build time.
+- The GLES context is created, used and released on one probe thread of the zgfx process.
+- Tests never need a GPU unless marked `#[ignore]` with the driver they need.
 
 ## Commands
 
 | Purpose | Command | Status |
 |---|---|---|
-| Build | — | Not Configured |
-| Test | — | Not Configured |
-| Lint / format | — | Not Configured |
+| Build | `cargo build --workspace` | Verified. Evidence: 2026-10-23 |
+| Test | `cargo test --workspace` | Verified. Evidence: 22 passed, 3 ignored (driver tests), 2026-10-23 |
+| Test with host drivers | `cargo test --workspace -- --include-ignored` (Mesa: `docs/TESTING.md`) | Verified. Evidence: 25 passed on Mesa 25.2.8 lavapipe/llvmpipe, Ubuntu 24.04 x86_64, 2026-10-23 |
+| Lint / format | `cargo clippy --workspace --all-targets -- -D warnings && cargo fmt --all --check` | Verified. Evidence: clean, 2026-10-23 |
+| MSRV | `cargo +1.85.0 test --workspace` | Verified. Evidence: passed, 2026-10-23 |
+| Shell / workflow lint | `shellcheck scripts/*.sh`; `actionlint .github/workflows/ci.yml` | Verified. Evidence: clean, 2026-10-23 |
+| Android binaries | `ANDROID_NDK_HOME=<ndk> scripts/build-android.sh` | Verified. Evidence: NDK r27d, arm64-v8a/x86_64/armeabi-v7a, 16 KB LOAD alignment checked, NEEDED only libc and libdl, 2026-10-23 |
 | Validate agent foundation | `python3 <path-to-.github>/agent-foundation/scripts/validate_agent_setup.py .` | Configured |
 
 Only list commands that exist in this repository. Never invent one.
